@@ -1,0 +1,140 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hangman</title>
+</head>
+
+<body>
+
+<p> Guesses Left  <span id="guesses-left"> </span></p>
+<p> Wrong Guesses <span id="wrong-guesses"> </span></p>
+<p> Wins <span id="win-counter"> </span> </p>
+<p> Losses <span id="loss-counter"> </span> </p>
+<h3 id = "word-blank"> Welcome to hangman </h3>
+
+
+<script type="text/javascript">
+
+var wordList = ["cat", "dog", "goat", "horse"];
+var chosenWord= ""; 
+var letterInChosenWord = [];
+var numblanks = 0; 
+var blanksAndSuccesses = [];
+var wrongGuesses = [];
+var winCounter = 0;
+var lossCounter= 1;
+var numGuesses = 9;
+
+
+
+function startGame () {
+//1. select a word at random (Math.floor(Math.random()*wordBank.length)
+// 2. break up the word into letters and replace with underscores (for loop) chosenWord.split("");
+// 3.  add underscores to HTML (some type of replacement (charAt?))
+// 4. numguesses always equals 9, blanks and successes is an empy array, and wrong guesses is empty (check)
+  wrongGuesses = [];
+  numGuesses = 9;
+  blanksAndSuccesses = [];
+
+
+  chosenWord = wordList[Math.floor(Math.random() * wordList.length)];
+  letterInChosenWord = chosenWord.split(""); // array of characters
+  numBlanks = letterInChosenWord.length;
+
+
+
+  for(var i = 0; i < numBlanks; i++){
+      blanksAndSuccesses.push("_");
+  }
+
+  document.getElementById('word-blank').innerHTML = blanksAndSuccesses.join(" ");
+  document.getElementById('guesses-left').innerHTML = numGuesses;
+
+}
+
+function checkLetters(letter){
+  // 1. compare the letter the user picks matches any of the letters in th word
+  // 2. a conditional statement that (if else) to determine if the letter the user picked is in the word. If so, do something, f not, do something else. (if else statement)
+  // 3. if the user is wrong, decrese the numGuesses variables by 1 ***--i
+  var letterInWord = false; 
+  for(var i=0; i < numBlanks; i++){
+    if (chosenWord[i] === letter){
+      letterInWord = true;
+    }
+  }
+
+  if(letterInWord) {
+    for (i=0; i < numBlanks; i++) {
+      if (chosenWord[i] ===letter){
+        blanksAndSuccesses [i] = letter; 
+      }
+    }
+  }
+  else {
+    numGuesses --; 
+    wrongGuesses.push(letter)}
+
+}
+
+
+function roundComplete(){
+
+  document.getElementById ('word-blank').innerHTML = blanksAndSuccesses.join(" ");
+  document.getElementById ('guesses-left').innerHTML = numGuesses; 
+  document.getElementById ('wrong-guesses').innerHTML = wrongGuesses.join (" ");
+
+  if(letterInChosenWord.join (" ") === blanksAndSuccesses.join (" ")) {
+    winCounter++; 
+    var theCorrectAnswer= letterInChosenWord.join (""); 
+    alert ("you win!! The word was " + theCorrectAnswer + ".");
+    document.getElementById ('win-counter').innerHTML = winCounter; 
+  } else if (numGuesses ===0) {
+    document.getElementById ('loss-counter').innerHTML = lossCounter++; alert ("you don't have any more guesses");
+    startGame();
+  }
+}
+
+
+// 1. update to update the HTML with letters that are in the word document.getElementByID
+// 2. update the HTML with guesses we have left document.getElementByID
+// 3. update the HTML to show the wrong guesses doucment.getElementByID
+// 4. determine if the user has won or not ***conditional If/else
+startGame ();
+document.onkeyup = function (event){
+
+var letterGuessed = String.fromCharCode(event.keyCode).toLowerCase(); 
+    checkLetters(letterGuessed)
+    roundComplete();
+   } 
+// 1. take in the letter we type in input type
+// 2. pass it through the checkLetter function if/else
+
+</script>
+</body>
+</html>
+
+
+<!-- 
+
+
+
+functions: 
+// 
+startGame()
+  choose random word
+  assign chosen work to var 
+  count the numbers of letters in the word
+   display blanks accorindingly
+   separate the letters in the the word to individual letters
+   check the length of the word
+checkletters()
+  if user input === a letter in the word then reduce a blank and add the letter to screen 
+  if user input !=== a letter in the word then add it to a bank
+  document.getElementById to display informaiton
+  replace the underscore if the letter is chosen
+roundComplete()
+  win/loss counter
+  if user inputs= all letter
+Resetfunction()
+
